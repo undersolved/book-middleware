@@ -1,10 +1,27 @@
 const express = require("express");
 const books = require("./in-mem-db");
+const fs = require("node:fs");
 
 const app = express();
 const PORT = 8000;
 
 app.use(express.json()); // middleware/plugin
+
+app.use(function (req, res, next) {
+	const log = `\n [${Date.now()}] ${req.method} ${req.path}`;
+	fs.appendFileSync("logs.txt", log, "utf-8");
+	next();
+});
+
+app.use(function (req, res, next) {
+	console.log("I am Middleware A");
+	next();
+});
+
+app.use(function (req, res, next) {
+	console.log(" I am Middleware B");
+	next();
+});
 
 // ROUTES
 
