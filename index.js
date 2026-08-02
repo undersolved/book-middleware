@@ -12,7 +12,7 @@ app.get("/books", (req, res) => {
 	res.status(200).json(books);
 });
 
-// dynamic route for individual id book IYKYK
+// dynamic route for individual id book IYKYKk
 
 app.get("/books/:id", (req, res) => {
 	const id = parseInt(req.params.id);
@@ -52,4 +52,4 @@ app.delete("/books/:id", (req, res) => {
 		.json({ message: `book id ${id} deleted successfully` });
 });
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
