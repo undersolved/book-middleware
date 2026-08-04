@@ -13,15 +13,7 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.use(function (req, res, next) {
-	console.log("I am Middleware A");
-	next();
-});
 
-app.use(function (req, res, next) {
-	console.log(" I am Middleware B");
-	next();
-});
 
 // ROUTES
 
