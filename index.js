@@ -5,15 +5,22 @@ const fs = require("node:fs");
 const app = express();
 const PORT = 8000;
 
-app.use(express.json()); // middleware/plugin
-
-app.use(function (req, res, next) {
+function loggerMiddleware(req, res, next) {
 	const log = `\n [${Date.now()}] ${req.method} ${req.path}`;
 	fs.appendFileSync("logs.txt", log, "utf-8");
 	next();
-});
+}
 
+function customMiddleware(req, res, next) {
+	console.log("I am a custom middleware");
+	next();
+}
 
+app.use(express.json()); // middleware/plugin
+
+app.use(loggerMiddleware);
+
+// for checking and adding a middleware on a specific path --> /books --> app.use('/books',(req,res,next)=>{})
 
 // ROUTES
 
@@ -23,7 +30,7 @@ app.get("/books", (req, res) => {
 
 // dynamic route for individual id book IYKYKk
 
-app.get("/books/:id", (req, res) => {
+app.get("/books/:id", customMiddleware, (req, res) => {
 	const id = parseInt(req.params.id);
 	if (isNaN(id)) return res.status(400).json({ error: "its a bad request id" });
 	const book = books.find((e) => e.id === id);
