@@ -41,3 +41,8 @@ exports.deleteBookById = function (req, res) {
 		.status(200)
 		.json({ message: `book id ${id} deleted successfully` });
 };
+
+
+/* -------------------------------------------------------------------------- */
+/*                    models views and controllers achieved                   */
+/* -------------------------------------------------------------------------- */
