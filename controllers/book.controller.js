@@ -47,7 +47,7 @@ exports.createBook = async function (req, res) {
 };
 
 exports.deleteBookById = async function (req, res) {
-	const id = parseInt(req.params.id);
+	const id = (req.params.id);
 
 	await db.delete(booksTable).where(eq(booksTable.id, id));
 
