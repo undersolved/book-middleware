@@ -1,4 +1,7 @@
-const { BOOKS } = require("../models/book");
+const booksTable = require("../models/book.model");
+const authorsTable = require("../models/author.model");
+
+const db = require("../db");
 
 exports.getAllBooks = function (req, res) {
 	res.status(200).json(BOOKS);
@@ -41,7 +44,6 @@ exports.deleteBookById = function (req, res) {
 		.status(200)
 		.json({ message: `book id ${id} deleted successfully` });
 };
-
 
 /* -------------------------------------------------------------------------- */
 /*                    models views and controllers achieved                   */
