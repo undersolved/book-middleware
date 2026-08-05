@@ -11,7 +11,7 @@ exports.getAllBooks = async function (req, res) {
 };
 
 exports.getBookById = async function (req, res) {
-	const id = parseInt(req.params.id);
+	const id = (req.params.id);
 
 	const [book] = await db
 		.select()
