@@ -1,48 +1,57 @@
 const booksTable = require("../models/book.model");
 const authorsTable = require("../models/author.model");
+const { eq } = require("drizzle-orm");
 
 const db = require("../db");
+const { table } = require("node:console");
 
-exports.getAllBooks = function (req, res) {
-	res.status(200).json(BOOKS);
+exports.getAllBooks = async function (req, res) {
+	const books = await db.select().from(booksTable);
+	return res.json(books);
 };
 
-exports.getBookById = function (req, res) {
+exports.getBookById = async function (req, res) {
 	const id = parseInt(req.params.id);
-	if (isNaN(id)) return res.status(400).json({ error: "its a bad request id" });
-	const book = BOOKS.find((e) => e.id === id);
+
+	const [book] = await db
+		.select()
+		.from(booksTable)
+		.where((table) => eq(table.id, id))
+		.limit(1);
 
 	if (!book) return res.status(404).json({ error: "book not found" });
 
 	return res.json(book);
 };
 
-exports.createBook = function (req, res) {
-	const { title, author } = req.body;
+exports.createBook = async function (req, res) {
+	const { title, authorId, description } = req.body;
+
 	if (!title || title === "")
 		return res.status(400).json({ message: "its a bad request, check title" });
-	if (!author || author === "")
-		return res.status(400).json({ message: "its a bad request, check author" });
-	const id = BOOKS.length + 1;
-	const book = { id, title, author };
-	BOOKS.push(book);
-	return res.status(201).json({ message: "book added successfully" });
+
+	const [result] = await db
+		.insert(booksTable)
+		.values({
+			title,
+			authorId,
+			description,
+		})
+		.returning({
+			id: booksTable.id,
+		});
+
+	return res
+		.status(201)
+		.json({ message: "book added successfully", id: result.id });
 };
 
-exports.deleteBookById = function (req, res) {
+exports.deleteBookById = async function (req, res) {
 	const id = parseInt(req.params.id);
-	if (isNaN(id)) return res.status(400).json({ error: "its a bad request id" });
 
-	const indexToDelete = BOOKS.findIndex((e) => e.id === id);
+	await db.delete(booksTable).where(eq(booksTable.id, id));
 
-	if (indexToDelete < 0) {
-		return res.status(400).json({ error: "its a bad request id" });
-	}
-
-	BOOKS.splice(indexToDelete, 1);
-	return res
-		.status(200)
-		.json({ message: `book id ${id} deleted successfully` });
+	return res.status(200).json({ message: `book deleted successfully` });
 };
 
 /* -------------------------------------------------------------------------- */
