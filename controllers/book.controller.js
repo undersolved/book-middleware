@@ -30,6 +30,7 @@ exports.getBookById = async function (req, res) {
 		.select()
 		.from(booksTable)
 		.where((table) => eq(table.id, id))
+		.leftJoin(authorsTable, eq(booksTable.authorId, authorsTable.id))
 		.limit(1);
 
 	if (!book) return res.status(404).json({ error: "book not found" });
