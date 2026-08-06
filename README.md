@@ -8,7 +8,6 @@ An Express + Drizzle ORM backend for managing books and authors on PostgreSQL. T
 - Express 5
 - Drizzle ORM and Drizzle Kit
 - PostgreSQL
-- dotenv
 
 ## Project Structure
 
@@ -34,22 +33,11 @@ npm install
 docker compose up -d postgres
 ```
 
-The bundled container uses these defaults:
-
-- database: `book-store`
-- user: `postgres`
-- password: `admin`
-- port: `5432`
-
 ### 3. Configure environment variables
 
-Create a `.env` file in the project root with a `DATABASE_URL` that points to your PostgreSQL instance.
+Set the database connection string in your environment before starting the app.
 
-Example:
-
-```bash
-DATABASE_URL=postgres://postgres:admin@localhost:5432/book-store
-```
+Use the same value in your local shell or editor settings.
 
 ### 4. Create or sync the tables
 
