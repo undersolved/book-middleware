@@ -1,17 +1,27 @@
 const booksTable = require("../models/book.model");
 const authorsTable = require("../models/author.model");
-const { eq } = require("drizzle-orm");
+const { eq, ilike } = require("drizzle-orm");
 
 const db = require("../db");
 const { table } = require("node:console");
 
 exports.getAllBooks = async function (req, res) {
+	const search = req.query.search;
+
+	if (search) {
+		const books = await db
+			.select()
+			.from(booksTable)
+			.where(ilike(booksTable.title, `%${search}%`));
+		return res.json(books);
+	}
+
 	const books = await db.select().from(booksTable);
 	return res.json(books);
 };
 
 exports.getBookById = async function (req, res) {
-	const id = (req.params.id);
+	const id = req.params.id;
 
 	const [book] = await db
 		.select()
@@ -47,7 +57,7 @@ exports.createBook = async function (req, res) {
 };
 
 exports.deleteBookById = async function (req, res) {
-	const id = (req.params.id);
+	const id = req.params.id;
 
 	await db.delete(booksTable).where(eq(booksTable.id, id));
 
